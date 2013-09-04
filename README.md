@@ -1,4 +1,4 @@
-android-pebble-auto-sound-profiles
+android-pebble-autosilent
 ==================================
 
 Android application that detects whenever a pebble watch is connected or disconnected from the phone. 
