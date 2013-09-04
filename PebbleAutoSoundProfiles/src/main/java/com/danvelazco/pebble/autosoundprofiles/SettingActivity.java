@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver;
 
+/**
+ * Activity that allows us to see the current state of the
+ * {@link com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver}
+ * component so that we can enable or disable it accordingly.
+ */
 public class SettingActivity extends Activity {
 
     // Members
@@ -24,20 +29,32 @@ public class SettingActivity extends Activity {
         mButtonState = (Button) findViewById(R.id.btn_enable);
         mButtonState.setText(isReceiverEnabled() ? R.string.btn_disable : R.string.btn_enable);
         mButtonState.setOnClickListener(new View.OnClickListener() {
-            /**
-             * {@inheritDoc}
-             */
             @Override
             public void onClick(View v) {
-                mButtonState.setEnabled(false);
-                // Togglet the state and update text
-                mButtonState.setText(setReceiverEnabled(!isReceiverEnabled())
-                        ? R.string.btn_disable : R.string.btn_enable);
-                mButtonState.setEnabled(true);
+                toggleComponentState();
             }
         });
     }
 
+    /**
+     * Toggle the state of the
+     * {@link com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver}
+     * component. If enabled, disable it, and vice-versa.
+     */
+    private void toggleComponentState() {
+        mButtonState.setEnabled(false);
+        // Toggle the state and update text
+        mButtonState.setText(setReceiverEnabled(!isReceiverEnabled())
+                ? R.string.btn_disable : R.string.btn_enable);
+        mButtonState.setEnabled(true);
+    }
+
+    /**
+     * Check whether the {@link com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver}
+     * component is currently enabled or not.
+     *
+     * @return {@link boolean}
+     */
     private boolean isReceiverEnabled() {
         ComponentName component = new ComponentName(SettingActivity.this, PebbleConnectionReceiver.class);
         PackageManager pm = getPackageManager();
@@ -50,6 +67,13 @@ public class SettingActivity extends Activity {
         return false;
     }
 
+    /**
+     * Change the state of the {@link com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver}
+     * component.
+     *
+     * @param enabled {@link boolean}
+     * @return {@link boolean} if the component's state was changed successfully
+     */
     private boolean setReceiverEnabled(boolean enabled) {
         // Component to change the state of
         ComponentName component = new ComponentName(SettingActivity.this, PebbleConnectionReceiver.class);

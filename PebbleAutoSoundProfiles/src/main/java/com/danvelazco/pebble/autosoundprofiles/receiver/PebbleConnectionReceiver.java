@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.media.AudioManager;
 
 /**
- * Author velazcod.
+ * {@link android.content.BroadcastReceiver} used to get intent actions
+ * related to a Pebble watch connecting or disconnecting.
+ *
+ * Whenever a watch is connected, the phone's ring mode will be silent,
+ * otherwise it will go back to normal.
  */
 public class PebbleConnectionReceiver extends BroadcastReceiver {
 
@@ -19,8 +23,7 @@ public class PebbleConnectionReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        // TODO: add ability to only allow one specific watch to change ring mode
+        // TODO: add ability to only allow one specific watch to change ring mode?
         //final String pebbleAddress = intent.getStringExtra("address");
 
         if (ACTION_CONNECTED.equals(intent.getAction())) {
