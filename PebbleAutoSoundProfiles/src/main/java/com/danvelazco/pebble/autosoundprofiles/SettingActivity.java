@@ -2,14 +2,12 @@ package com.danvelazco.pebble.autosoundprofiles;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver;
-import android.database.Cursor;
-import android.net.Uri;
-import android.content.Intent;
 
 /**
  * Activity that allows us to see the current state of the
@@ -87,12 +85,9 @@ public class SettingActivity extends Activity {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED),
                     PackageManager.DONT_KILL_APP);
             if (enabled) {
-                Cursor c = getApplicationContext().getContentResolver().query(
-                        Uri.parse("content://com.getpebble.android.provider/state"), null, null, null, null);
-                if (c != null && c.moveToNext() && c.getInt(0) == 1) {
-                    Intent intent = new Intent("com.danvelazco.pebble.autosoundprofiles.pebble_already_connected");
-                    sendBroadcast(intent);
-                }
+                // If the component is enabled, make it check the connection status of the watch
+                Intent intent = new Intent(PebbleConnectionReceiver.ACTION_CHECK_STATUS);
+                sendBroadcast(intent);
             }
         }
         return enabled;

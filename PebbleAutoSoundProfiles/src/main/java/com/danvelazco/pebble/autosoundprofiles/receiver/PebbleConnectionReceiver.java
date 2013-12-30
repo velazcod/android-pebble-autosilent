@@ -3,7 +3,9 @@ package com.danvelazco.pebble.autosoundprofiles.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.AudioManager;
+import android.net.Uri;
 
 /**
  * {@link android.content.BroadcastReceiver} used to get intent actions
@@ -15,9 +17,9 @@ import android.media.AudioManager;
 public class PebbleConnectionReceiver extends BroadcastReceiver {
 
     // Constants
+    public static final String ACTION_CHECK_STATUS = "com.danvelazco.pebble.autosoundprofiles.pebble_check_status";
     private static final String ACTION_CONNECTED = "com.getpebble.action.PEBBLE_CONNECTED";
     private static final String ACTION_DISCONNECTED = "com.getpebble.action.PEBBLE_DISCONNECTED";
-    private static final String ACTION_ALREADY_CONNECTED = "com.danvelazco.pebble.autosoundprofiles.pebble_already_connected";
 
     // Store original ring setting (e.g. RINGER_MODE_VIBRATE or RINGER_MODE_NORMAL)
     private static int originalRinger = AudioManager.RINGER_MODE_NORMAL;
@@ -30,7 +32,13 @@ public class PebbleConnectionReceiver extends BroadcastReceiver {
         // TODO: add ability to only allow one specific watch to change ring mode?
         //final String pebbleAddress = intent.getStringExtra("address");
 
-        if (ACTION_CONNECTED.equals(intent.getAction()) || ACTION_ALREADY_CONNECTED.equals(intent.getAction())) {
+        if (ACTION_CHECK_STATUS.equals(intent.getAction())) {
+            Uri pebbleStateUri = Uri.parse("content://com.getpebble.android.provider/state");
+            Cursor c = context.getContentResolver().query(pebbleStateUri, null, null, null, null);
+            if (c != null && c.moveToNext() && c.getInt(0) == 1) {
+                setSilentMode(context, true);
+            }
+        } else if (ACTION_CONNECTED.equals(intent.getAction())) {
             setSilentMode(context, true);
         } else if (ACTION_DISCONNECTED.equals(intent.getAction())) {
             setSilentMode(context, false);
