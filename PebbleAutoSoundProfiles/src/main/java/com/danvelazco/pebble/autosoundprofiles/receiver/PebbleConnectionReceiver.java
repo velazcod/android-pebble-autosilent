@@ -51,13 +51,18 @@ public class PebbleConnectionReceiver extends BroadcastReceiver {
      * @param context {@link android.content.Context}
      * @param silent {@link boolean} whether to set to silent or unset
      */
-    public void setSilentMode(Context context, boolean silent) {
+    private void setSilentMode(Context context, boolean silent) {
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if (silent) {
             originalRinger = audioManager.getRingerMode();
             audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
-            audioManager.setRingerMode(originalRinger);
+            // Never switch back to 'silent', even if the phone used to be in silent mode
+            if (originalRinger != AudioManager.RINGER_MODE_SILENT) {
+                audioManager.setRingerMode(originalRinger);
+            } else {
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
         }
     }
 
