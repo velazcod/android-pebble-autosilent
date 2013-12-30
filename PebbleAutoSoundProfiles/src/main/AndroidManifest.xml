@@ -3,11 +3,11 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.danvelazco.pebble.autosoundprofiles"
     android:versionCode="20130905"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
