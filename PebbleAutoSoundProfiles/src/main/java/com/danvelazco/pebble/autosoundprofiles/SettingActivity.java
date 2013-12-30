@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.danvelazco.pebble.autosoundprofiles.receiver.PebbleConnectionReceiver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.content.Intent;
 
 /**
  * Activity that allows us to see the current state of the
@@ -83,6 +86,14 @@ public class SettingActivity extends Activity {
                     (enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED),
                     PackageManager.DONT_KILL_APP);
+            if (enabled) {
+                Cursor c = getApplicationContext().getContentResolver().query(
+                        Uri.parse("content://com.getpebble.android.provider/state"), null, null, null, null);
+                if (c != null && c.moveToNext() && c.getInt(0) == 1) {
+                    Intent intent = new Intent("com.danvelazco.pebble.autosoundprofiles.pebble_already_connected");
+                    sendBroadcast(intent);
+                }
+            }
         }
         return enabled;
     }
