@@ -24,4 +24,13 @@ android {
         minSdkVersion 14
         targetSdkVersion 19
     }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+            debuggable false
+        }
+    }
+
 }
